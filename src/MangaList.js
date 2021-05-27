@@ -1,7 +1,8 @@
-import { AppBar, createMuiTheme, InputBase,Link, List, ListItem, 
+import { AppBar, createMuiTheme, InputBase, List, ListItem, 
   ListItemText, makeStyles, ThemeProvider, Toolbar } from "@material-ui/core";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useHistory } from "react-router";
 
 // ===================================================
 // Variables
@@ -48,10 +49,12 @@ const useStyles = makeStyles((theme) => ({
 // ===================================================
 /**
  * Makes a GET request to the Mangadex API to search for manga
- * @param {function} setMangaList 
- * @param {string} searchQuery 
+ * @param {string} searchQuery the search query that is made
+ * @param {object} history the react router history
+ * @param {function} setMangaList sets the mangaList variable
+ * @param {function} setCurrentManga sets the current manga (stored in App.js)
  */
-function getMangaDexListOfManga(setMangaList, searchQuery) {
+function getMangaDexListOfManga(searchQuery, history, setMangaList, setCurrentManga) {
   // query parameter for title
   const titleQuery = (searchQuery)?`title=${searchQuery}`:"";
   // provide GET request to retrieve the manga list
@@ -67,13 +70,15 @@ function getMangaDexListOfManga(setMangaList, searchQuery) {
           {mangaUUIDsList.map((resultItem) => {
               return(
                 // Use the UUID as the list item key
-                <ListItem key={resultItem.data.id}>
-                  <Link>
-                    <ListItemText>
-                      {/* Get the title of the manga and use it as text */}
-                      {resultItem.data.attributes.title[englishLanguageTag]}
-                    </ListItemText>
-                  </Link>
+                // also make the list item a button that sets the current manga and updates the page history
+                <ListItem key={resultItem.data.id} button divider onClick={() => {
+                    setCurrentManga(resultItem.data.id);
+                    history.push("/manga"); // opens the chapter page
+                  }}>
+                  <ListItemText>
+                    {/* Get the title of the manga and use it as text */}
+                    {resultItem.data.attributes.title[englishLanguageTag]}
+                  </ListItemText>
                 </ListItem>
               );
             }
@@ -91,25 +96,30 @@ function getMangaDexListOfManga(setMangaList, searchQuery) {
 // ===================================================
 // Component Function
 // ===================================================
-function MangaList() {
+function MangaList(props) {
   // == Styles to use ==
   const classes = useStyles();
 
-  // == States to keep track of ==
-
+  // == State to keep track of ==
   // state of the user's manga title query
   const [searchQuery, setSearchQuery] = useState("");
 
   // state of the manga list to display
   const [mangaList, setMangaList] = useState(undefined);
 
+  // == Other Variables ==
+  // react router history for linking to other parts of the router
+  const history = useHistory();
+
   /**
    * Effect hook. Acts on:
    *  - the modification of the search query
+   *  - react router history
+   *  - not sure why, but also the function "setCurrentManga"
    */
   useEffect(() => {
-    getMangaDexListOfManga(setMangaList, searchQuery);
-  }, [searchQuery]);
+    getMangaDexListOfManga(searchQuery, history, setMangaList, props.setCurrentManga);
+  }, [searchQuery, history, props.setCurrentManga]);
 
   // == Component Return Value ==
   return(
