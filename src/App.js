@@ -12,12 +12,14 @@ function App() {
   // current manga as a string UUID
   const [currentManga, setCurrentManga] = useState("");
 
+  // current chapter as a string UUID
+  // const [currentChapter, setCurrentChapter] = useState("");
+
   /**
    * == Effect hook. Acts on: ==
    *  - when currentManga is modified
    */
   useEffect(() => {
-    console.log(currentManga);
   }, [currentManga]);
 
   return (
