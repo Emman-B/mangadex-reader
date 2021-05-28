@@ -1,6 +1,7 @@
 import './App.css';
 import MangaList from './MangaList.js';
 import ChapterList from './ChapterList';
+import ChapterReader from './ChapterReader';
 import {HashRouter, Redirect, Route, Switch} from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
@@ -13,7 +14,7 @@ function App() {
   const [currentManga, setCurrentManga] = useState("");
 
   // current chapter as a string UUID
-  // const [currentChapter, setCurrentChapter] = useState("");
+  const [currentChapter, setCurrentChapter] = useState("");
 
   /**
    * == Effect hook. Acts on: ==
@@ -42,9 +43,22 @@ function App() {
             // verify if current manga has been set or not by checking its length
             (currentManga.length > 0)?
               // if so, then open the ChapterList
-              <ChapterList currentManga={currentManga} />:
+              <ChapterList currentManga={currentManga} setCurrentChapter={setCurrentChapter} />:
               // if not set, then redirect to main
               <Redirect to="/" />
+          }
+        />
+
+        {/* Chapter Reader Route */}
+        <Route 
+          exact path='/reader' 
+          render={() => 
+            // verify if current chapter has been set or not by checking its length
+            (currentChapter.length > 0)?
+              // if so, then open the chapter reader
+              <ChapterReader currentChapter={currentChapter} />:
+              // if not set, then redirect to main
+              <Redirect to="/manga" />
           }
         />
         

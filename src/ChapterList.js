@@ -128,22 +128,17 @@ function getChapterList(currentManga, setChapterList, chapterLimitOffset, setNum
 }
 
 /**
- * This retrieves the scanlation groups for each chapter in the list
- * @param {array} chapterList list of objects
- * @param {function} setChapterList callback to set chapter list
- */
-function getChapterListScanlationGroups(chapterList, setChapterList) {
-}
-
-/**
  * Turns the chapter list into an array of JSX elements
  * @param {array} chapterList 
  * @returns JSX array
  */
-function turnChapterListIntoJSX(chapterList) {
+function turnChapterListIntoJSX(chapterList, setCurrentChapter, history) {
   if (chapterList) {
     return chapterList.map((chapter) => (
-      <ListItem key={chapter.id} button divider>
+      <ListItem key={chapter.id} button divider onClick={() => {
+          history.push('/reader');
+          setCurrentChapter(chapter.id);
+        }}>
         <ListItemText>
           {`${chapter.volume}, ${chapter.chapter} ${chapter.title}`}
         </ListItemText>
@@ -222,7 +217,7 @@ function ChapterList(props) {
       <Typography variant="h6" >Chapter List</Typography>
       {makePageNavToolbar(chapterLimitOffset, setChapterLimitOffset, numberOfShownChapters)}
       <List>
-        {turnChapterListIntoJSX(chapterList)}
+        {turnChapterListIntoJSX(chapterList, props.setCurrentChapter, history)}
       </List>
       {makePageNavToolbar(chapterLimitOffset, setChapterLimitOffset, numberOfShownChapters)}
     </>
