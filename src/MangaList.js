@@ -58,7 +58,7 @@ function getMangaDexListOfManga(searchQuery, history, setMangaList, setCurrentMa
   // query parameter for title
   const titleQuery = (searchQuery)?`title=${searchQuery}`:"";
   // provide GET request to retrieve the manga list
-  axios.get(`https://api.mangadex.org/manga?${titleQuery}`)
+  axios.get(`https://api.mangadex.org/manga?${titleQuery}`, {crossDomain: true})
     .then((response) => {
       // retrieve the list of manga UUIDs
       const {results: mangaUUIDsList} = response.data;
