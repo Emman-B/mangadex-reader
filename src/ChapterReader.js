@@ -1,6 +1,15 @@
-import { List, ListItem } from "@material-ui/core";
+import { List, ListItem, makeStyles } from "@material-ui/core";
 import axios from "axios";
 import { useEffect, useState } from "react";
+
+// ===================================================
+// Variables
+// ===================================================
+const useStyles = makeStyles({
+  page: {
+    maxWidth:'100%'
+  }
+});
 
 // ===================================================
 // Helper Function
@@ -57,15 +66,23 @@ function ChapterReader(props) {
   // list of manga pages (maybe as an array of URLs?)
   const [pageList, setPageList] = useState([]);
 
+  /**
+   * Use Effect hook -> acts on:
+   *  - the current chapter
+   */
   useEffect(() => {
     getChapterDetails(props.currentChapter, setPageList);
   }, [props.currentChapter]);
+
+  // == Variables ==
+  // for styles
+  const classes = useStyles();
 
   return (
     <List>
       {pageList.map((page) => (
         <ListItem>
-          <img src={page} alt={page} />
+          <img src={page} alt={page} className={classes.page} />
         </ListItem>
       ))}
     </List>
