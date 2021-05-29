@@ -8,6 +8,9 @@ import { useHistory } from "react-router";
 // Variables
 // ===================================================
 
+// DEBUG: try creating an axios instance
+const axInstance = axios.create();
+
 // tag for english language stuff
 const englishLanguageTag = "en";
 
@@ -58,7 +61,7 @@ function getMangaDexListOfManga(searchQuery, history, setMangaList, setCurrentMa
   // query parameter for title
   const titleQuery = (searchQuery)?`title=${searchQuery}`:"";
   // provide GET request to retrieve the manga list
-  axios.get(`https://api.mangadex.org/manga?${titleQuery}`, {crossDomain: true})
+  axInstance.get(`https://api.mangadex.org/manga?${titleQuery}`, {crossDomain: true})
     .then((response) => {
       // retrieve the list of manga UUIDs
       const {results: mangaUUIDsList} = response.data;
